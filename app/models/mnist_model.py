@@ -40,6 +40,10 @@ def train_model():
             if batch_idx % 100 == 0:  # Print every 100 batches
                 print(f'Epoch [{epoch + 1}/1], Batch [{batch_idx + 1}/{len(train_loader)}], Loss: {loss.item():.4f}')
 
+    # Save the model after training
+    torch.save(model.state_dict(), 'model.pth')
+    print("Model saved as 'model.pth'.")
+
     # Evaluate the model
     test_dataset = datasets.MNIST(root='./data', train=False, download=True, transform=transform)
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=64, shuffle=False)
