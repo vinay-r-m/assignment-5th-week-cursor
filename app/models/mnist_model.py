@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -19,6 +20,16 @@ class MNISTModel(nn.Module):
         return x
 
 def train_model():
+    # Check if the MNIST dataset is already downloaded
+    train_images_path = './data/MNIST/raw/train-images-idx3-ubyte'
+    train_labels_path = './data/MNIST/raw/train-labels-idx1-ubyte'
+    test_images_path = './data/MNIST/raw/t10k-images-idx3-ubyte'
+    test_labels_path = './data/MNIST/raw/t10k-labels-idx1-ubyte'
+
+    if not (os.path.exists(train_images_path) and os.path.exists(train_labels_path) and
+            os.path.exists(test_images_path) and os.path.exists(test_labels_path)):
+        print("Downloading MNIST dataset...")
+
     transform = transforms.Compose([transforms.ToTensor()])
     train_dataset = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=64, shuffle=True)
