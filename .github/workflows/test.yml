@@ -1,0 +1,50 @@
+name: Test MNIST Model
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install dependencies
+      run: |
+        pip install torch torchvision
+
+    - name: Run model test
+      run: |
+        python -c "
+        import torch
+        from torchvision import datasets, transforms
+        from app.models.mnist_model import MNISTModel
+
+        # Load the model and test dataset
+        transform = transforms.Compose([transforms.ToTensor()])
+        test_dataset = datasets.MNIST(root='./data', train=False, download=True, transform=transform)
+        test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=64, shuffle=False)
+
+        model = MNISTModel()
+        model.load_state_dict(torch.load('model.pth'))  # Load the trained model
+
+        model.eval()
+        correct = 0
+        total = 0
+        with torch.no_grad():
+            for images, labels in test_loader:
+                outputs = model(images)
+                _, predicted = torch.max(outputs.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+
+        accuracy = 100 * correct / total
+        print(f'Test accuracy: {accuracy:.2f}%')
+        assert accuracy >= 95, 'Model accuracy is below 95%'
+        "
