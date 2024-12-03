@@ -53,7 +53,5 @@ jobs:
         accuracy = 100 * correct / total
         print(f'Test accuracy: {accuracy:.2f}%')
         
-        # Round up accuracy to the next highest integer
-        rounded_accuracy = math.ceil(accuracy)
-        assert rounded_accuracy >= 95, 'Model accuracy is below 95%'
+        assert accuracy >= 95, 'Model accuracy is below 95%'
         "
