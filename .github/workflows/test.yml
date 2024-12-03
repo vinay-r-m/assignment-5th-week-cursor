@@ -35,6 +35,11 @@ jobs:
         model = MNISTModel()
         model.load_state_dict(torch.load('model.pth'))  # Load the trained model
 
+        # Check the number of parameters
+        num_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print(f'Number of trainable parameters: {num_params}')
+        assert num_params < 25000, 'Model has more than 25000 parameters'
+
         model.eval()
         correct = 0
         total = 0
