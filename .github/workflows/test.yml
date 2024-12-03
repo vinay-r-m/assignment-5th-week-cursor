@@ -46,5 +46,5 @@ jobs:
 
         accuracy = 100 * correct / total
         print(f'Test accuracy: {accuracy:.2f}%')
-        assert accuracy >= 90, 'Model accuracy is below 90%'
+        assert accuracy >= 95, 'Model accuracy is below 95%'
         "
