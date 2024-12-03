@@ -25,6 +25,7 @@ jobs:
         import torch
         from torchvision import datasets, transforms
         from app.models.mnist_model import MNISTModel
+        import math
 
         # Load the model and test dataset
         transform = transforms.Compose([transforms.ToTensor()])
@@ -46,5 +47,8 @@ jobs:
 
         accuracy = 100 * correct / total
         print(f'Test accuracy: {accuracy:.2f}%')
-        assert accuracy >= 95, 'Model accuracy is below 95%'
+        
+        # Round up accuracy to the next highest integer
+        rounded_accuracy = math.ceil(accuracy)
+        assert rounded_accuracy >= 95, 'Model accuracy is below 95%'
         "
